@@ -6,6 +6,8 @@ import { useState, useEffect } from "react"
 import { filterPokemon } from "../utils/filterPokemon"
 
 function Home() {
+  // TODO: Filtrar Pokemons com base na Barra de Pesquisa
+
   const [search, setSearch] = useState("")
   const [pokemons, setPokemons] = useState(null)
   const [filteredPokemons, setFilteredPokemons] = useState(null)
@@ -13,7 +15,7 @@ function Home() {
   useEffect(() => {
     const getPokemons = async () => {
       const data = await fetchPokemon(
-        "https://pokeapi.co/api/v2/pokemon?offset=20&limit=1500",
+        "https://pokeapi.co/api/v2/pokemon?offset=20&limit=10",
       )
       setPokemons(data.results)
     }
@@ -26,11 +28,12 @@ function Home() {
       // Verifica se 'pokemons' não é 'null' ou 'undefined'
       setFilteredPokemons(filterPokemon(pokemons, search))
     }
-  }, [search, pokemons])
+  }, [search])
 
   return (
     <div>
-      <div className="flex bg-slate-900 p-6 items-center justify-center">
+      {/* Barra de Pesquisa */}
+      <div className="flex bg-slate-900 p-8 my-3 items-center justify-center rounded-lg">
         <div className="w-1/2 mx-6">
           <h2 className="text-xl m-1 text-left">Nome ou Número</h2>
           <input
@@ -51,6 +54,7 @@ function Home() {
         </div>
       </div>
 
+      {/* Lista de Pokemons */}
       {pokemons && <PokemonList pokemons={pokemons} />}
     </div>
   )
