@@ -15,7 +15,7 @@ function Home() {
   useEffect(() => {
     const getPokemons = async () => {
       const data = await fetchPokemon(
-        "https://pokeapi.co/api/v2/pokemon?offset=20&limit=10",
+        "https://pokeapi.co/api/v2/pokemon?&limit=30",
       )
       setPokemons(data.results)
     }
@@ -42,7 +42,7 @@ function Home() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button className="bg-orange-600 text-xl text-white rounded-md h-10 w-10 ml-5">
+          <button className="bg-orange-600 hover:bg-red-700 hover:scale-105 duration-200 text-xl text-white rounded-md h-10 w-10 ml-5">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </div>
@@ -56,6 +56,13 @@ function Home() {
 
       {/* Lista de Pokemons */}
       {pokemons && <PokemonList pokemons={pokemons} />}
+
+      {/* Botão de Carregar Pokemons */}
+      <div className="flex justify-center my-4">
+        <button className="bg-blue-500 hover:bg-blue-700 hover:scale-105 duration-300 text-white p-4 rounded-lg">
+          Carregar mais!
+        </button>
+      </div>
     </div>
   )
 }

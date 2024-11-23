@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { fetchPokemon } from "../http/pokemonFetch"
+import { Link } from "react-router-dom"
 
 function PokemonList({
   pokemons,
@@ -15,6 +16,7 @@ function PokemonList({
           const details = await fetchPokemon(pokemon.url)
           setDetailedPokemon((prev) => {
             // Evita duplicações garantindo que o estado seja atualizado corretamente
+            // O que é uma gambiarra, não sei qual seria a correção para isso
             if (!prev.some((p) => p.name === details.name)) {
               return [...prev, details]
             }
@@ -31,28 +33,30 @@ function PokemonList({
     <div className="pokemonList">
       <ul className="grid grid-cols-3 gap-4">
         {detailedPokemon.map((pokemon: any, index: number) => (
-          <li key={index}>
-            <div className="card card-compact w-96 shadow-x1 bg-black">
-              <figure>
-                <img className="w-48" src={pokemon.sprites.front_default} />
-              </figure>
-              <div className="card-body">
-                <h2 className="card-title">{pokemon.name}</h2>
-                <div className="card-actions justify-start">
-                  {pokemon.types[0] && (
-                    <div className="badge badge-outline">
-                      {pokemon.types[0].type.name}
-                    </div>
-                  )}
-                  {pokemon.types[1] && (
-                    <div className="badge badge-outline">
-                      {pokemon.types[1].type.name}
-                    </div>
-                  )}
+          <Link to={`pokemon/${pokemon.id}`}>
+            <li key={index}>
+              <div className="card card-compact w-96 shadow-x1 bg-slate-800">
+                <figure className="bg-slate-700">
+                  <img className="w-48" src={pokemon.sprites.front_default} />
+                </figure>
+                <div className="card-body">
+                  <h2 className="card-title">{pokemon.name}</h2>
+                  <div className="card-actions justify-start">
+                    {pokemon.types[0] && (
+                      <div className="badge badge-outline">
+                        {pokemon.types[0].type.name}
+                      </div>
+                    )}
+                    {pokemon.types[1] && (
+                      <div className="badge badge-outline">
+                        {pokemon.types[1].type.name}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
+          </Link>
         ))}
       </ul>
     </div>

@@ -4,15 +4,15 @@ import Home from "./components/home"
 
 export function App() {
   return (
-    <div className="app h-screen w-full">
-      <Navbar />
-      <Router>
+    <Router>
+      <div className="app h-screen w-full">
+        <Navbar />
         <main className="flex justify-center items-center bg-white">
           <Routes>
-            <Route path="/" element={<Home />}></Route>
+            <Route path="/home" element={<Home />} />
           </Routes>
         </main>
-      </Router>
-    </div>
+      </div>
+    </Router>
   )
 }
