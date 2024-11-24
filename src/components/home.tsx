@@ -9,14 +9,24 @@ function Home() {
   // TODO: Filtrar Pokemons com base na Barra de Pesquisa
 
   const [search, setSearch] = useState("")
-  const [pokemons, setPokemons] = useState(null)
-  const [filteredPokemons, setFilteredPokemons] = useState(null)
+  const [response, setResponse] = useState(null)
+  const [pokemons, setPokemons] = useState([])
+  const [filteredPokemons, setFilteredPokemons] = useState([])
+  const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon")
+
+  const loadPokemons = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // event.preventDefault()
+    console.log("botão clicado")
+    const response = await fetchPokemon(url)
+    setResponse(response)
+    setPokemons((prev) => [...prev, ...response.results])
+    setUrl(response.next)
+  }
 
   useEffect(() => {
     const getPokemons = async () => {
-      const data = await fetchPokemon(
-        "https://pokeapi.co/api/v2/pokemon?&limit=30",
-      )
+      const data = await fetchPokemon(url)
+      setResponse(data)
       setPokemons(data.results)
     }
 
@@ -42,7 +52,10 @@ function Home() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button className="bg-orange-600 hover:bg-red-700 hover:scale-105 duration-200 text-xl text-white rounded-md h-10 w-10 ml-5">
+          <button
+            className="bg-orange-600 hover:bg-red-700 hover:scale-105 
+            duration-200 text-xl text-white rounded-md h-10 w-10 ml-5"
+          >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </div>
@@ -59,7 +72,12 @@ function Home() {
 
       {/* Botão de Carregar Pokemons */}
       <div className="flex justify-center my-4">
-        <button className="bg-blue-500 hover:bg-blue-700 hover:scale-105 duration-300 text-white p-4 rounded-lg">
+        <button
+          type="button"
+          className="bg-blue-500 hover:bg-blue-700 hover:scale-105 
+          duration-300 text-white p-4 rounded-lg"
+          onClick={loadPokemons}
+        >
           Carregar mais!
         </button>
       </div>
