@@ -9,20 +9,17 @@ function PokemonList({
 
   useEffect(() => {
     if (pokemons.length > 0) {
-      setDetailedPokemon([]) // Resetar o estado antes de buscar detalhes
-
       const fetchDetails = async () => {
+        const newDetails: any = []
+
         for (const pokemon of pokemons) {
+          // Evita buscar detalhes de pokémons que já existem
           const details = await fetchPokemon(pokemon.url)
-          setDetailedPokemon((prev) => {
-            // Evita duplicações garantindo que o estado seja atualizado corretamente
-            // O que é uma gambiarra, não sei qual seria a correção para isso
-            if (!prev.some((p) => p.name === details.name)) {
-              return [...prev, details]
-            }
-            return prev
-          })
+          newDetails.push(details)
         }
+
+        // Adiciona os novos detalhes ao estado
+        setDetailedPokemon((prev) => [...prev, ...newDetails])
       }
 
       fetchDetails()
@@ -34,8 +31,8 @@ function PokemonList({
       <ul className="grid grid-cols-3 gap-4">
         {detailedPokemon.map((pokemon: any, index: number) => (
           <Link to={`pokemon/${pokemon.id}`}>
-            <li key={index}>
-              <div className="card card-compact w-96 shadow-x1 bg-slate-800">
+            <li key={pokemon.id}>
+              <div className="card card-compact w-96 shadow-x1 bg-slate-800 animate-fade-in">
                 <figure className="bg-slate-700">
                   <img className="w-48" src={pokemon.sprites.front_default} />
                 </figure>

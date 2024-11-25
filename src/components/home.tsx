@@ -9,36 +9,25 @@ function Home() {
   // TODO: Filtrar Pokemons com base na Barra de Pesquisa
 
   const [search, setSearch] = useState("")
-  const [response, setResponse] = useState(null)
   const [pokemons, setPokemons] = useState([])
   const [filteredPokemons, setFilteredPokemons] = useState([])
   const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon")
 
-  const loadPokemons = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    // event.preventDefault()
-    console.log("botão clicado")
+  const loadPokemons = async () => {
     const response = await fetchPokemon(url)
-    setResponse(response)
-    setPokemons((prev) => [...prev, ...response.results])
     setUrl(response.next)
+    setPokemons(response.results)
   }
 
   useEffect(() => {
     const getPokemons = async () => {
       const data = await fetchPokemon(url)
-      setResponse(data)
       setPokemons(data.results)
+      setUrl(data.next) // Para que quando eu aperte o botão de carregar mais venha a outra leva de pokemons
     }
 
     getPokemons()
   }, [])
-
-  useEffect(() => {
-    if (pokemons) {
-      // Verifica se 'pokemons' não é 'null' ou 'undefined'
-      setFilteredPokemons(filterPokemon(pokemons, search))
-    }
-  }, [search])
 
   return (
     <div>
