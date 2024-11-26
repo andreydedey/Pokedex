@@ -3,7 +3,6 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyin
 import PokemonList from "./pokemonList"
 import { fetchPokemon } from "../http/pokemonFetch"
 import { useState, useEffect } from "react"
-import { filterPokemon } from "../utils/filterPokemon"
 
 function Home() {
   // TODO: Filtrar Pokemons com base na Barra de Pesquisa

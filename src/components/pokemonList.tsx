@@ -29,8 +29,8 @@ function PokemonList({
   return (
     <div className="pokemonList">
       <ul className="grid grid-cols-3 gap-4">
-        {detailedPokemon.map((pokemon: any, index: number) => (
-          <Link to={`pokemon/${pokemon.id}`}>
+        {detailedPokemon.map((pokemon: any) => (
+          <Link to={`/pokemon/${pokemon.id}`}>
             <li key={pokemon.id}>
               <div className="card card-compact w-96 shadow-x1 bg-slate-800 animate-fade-in">
                 <figure className="bg-slate-700">
