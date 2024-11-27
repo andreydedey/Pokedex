@@ -11,9 +11,9 @@ import Pokemon from "./components/pokemon"
 export function App() {
   return (
     <Router>
-      <div className="app h-screen w-full">
+      <div className="app h-screen w-full bg-white">
         <Navbar />
-        <main className="flex justify-center items-center bg-white">
+        <main className="bg-white">
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<Home />} />

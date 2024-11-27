@@ -29,7 +29,7 @@ function Home() {
   }, [])
 
   return (
-    <div>
+    <div className="mx-4">
       {/* Barra de Pesquisa */}
       <div className="flex bg-slate-900 p-8 my-3 items-center justify-center rounded-lg">
         <div className="w-1/2 mx-6">
