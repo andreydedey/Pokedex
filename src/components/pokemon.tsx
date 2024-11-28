@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom"
 function Pokemon() {
   const { id } = useParams()
   const [pokemon, setPokemon] = useState(null)
+  const [pokemonSpecies, setPokemonSpecies] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -15,7 +16,16 @@ function Pokemon() {
       })
     }
 
+    const getPokemonSpecies = async () => {
+      fetchPokemon(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(
+        (data) => {
+          setPokemonSpecies(data)
+        },
+      )
+    }
+
     getPokemon()
+    getPokemonSpecies()
   }, [])
 
   if (pokemon) {
@@ -25,29 +35,44 @@ function Pokemon() {
           <h1 className="text-3xl text-black font-bold">
             {pokemon.name} <span className="text-gray-500">Nº{pokemon.id}</span>
           </h1>
-          <div className="bg-slate-200 mt-2 p-5 rounded-md">
-            <div className="flex items-center justify-center gap-4">
-              <figure>
-                <img
-                  src={pokemon.sprites.front_default}
-                  alt={pokemon.name}
-                  className="w-48"
-                />
-              </figure>
-              <div className="grid grid-cols-2 gap-2 bg-blue-500 p-6 rounded-md text-white text-lg">
-                <p>
-                  Altura: <br />{" "}
+          <div className="flex gap-4 mt-10">
+            <figure className="bg-slate-200 rounded-xl">
+              <img
+                src={pokemon.sprites.other["official-artwork"].front_default}
+                alt={pokemon.name}
+                className="h-64"
+              />
+            </figure>
+            <div className="flex flex-col w-96">
+              <p className="text-black text-lg text-justify mb-3">
+                {pokemonSpecies.flavor_text_entries[0].flavor_text}
+              </p>
+              <ul className="grid grid-cols-2 gap-2 bg-sky-500 p-6 rounded-md text-white text-xl">
+                <li>
+                  Altura: <br />
                   <span className="text-black">
                     {pokemon.height * 10} centímetros
                   </span>
-                </p>
-                <p>
-                  Peso: <br />{" "}
+                </li>
+                <li>
+                  Peso: <br />
                   <span className="text-black">
                     {pokemon.weight} hectogramas
                   </span>
-                </p>
-              </div>
+                </li>
+                <li>
+                  Habilidade: <br />
+                  <span className="text-black">
+                    {pokemon.abilities[0].ability.name}
+                  </span>
+                </li>
+                <li>
+                  Habitat: <br />
+                  <span className="text-black">
+                    {pokemonSpecies.habitat.name}
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

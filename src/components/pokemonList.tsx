@@ -34,7 +34,12 @@ function PokemonList({
             <li key={pokemon.id}>
               <div className="card card-compact w-96 shadow-x1 bg-slate-800 animate-fade-in">
                 <figure className="bg-slate-700">
-                  <img className="w-48" src={pokemon.sprites.front_default} />
+                  <img
+                    className="w-48"
+                    src={
+                      pokemon.sprites.other["official-artwork"].front_default
+                    }
+                  />
                 </figure>
                 <div className="card-body">
                   <h2 className="card-title">{pokemon.name}</h2>
