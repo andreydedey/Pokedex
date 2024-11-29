@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { fetchPokemon } from "../http/pokemonFetch"
 import { useParams } from "react-router-dom"
+import ProgressBar from "../ui/progressBar"
 
 function Pokemon() {
   const { id } = useParams()
@@ -74,6 +75,16 @@ function Pokemon() {
                 </li>
               </ul>
             </div>
+          </div>
+          <div className="flex flex-col gap mt-3">
+            <h3 className="text-2xl text-black font-semibold">Stats</h3>
+            {pokemon.stats.map((stats) => (
+              <ProgressBar
+                key={stats.stat.name}
+                value={stats.base_stat}
+                name={stats.stat.name}
+              />
+            ))}
           </div>
         </div>
       </>
