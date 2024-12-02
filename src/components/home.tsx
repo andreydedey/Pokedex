@@ -29,14 +29,14 @@ function Home() {
   }, [])
 
   return (
-    <div className="mx-4">
+    <div className="mt-8">
       {/* Barra de Pesquisa */}
-      <div className="flex bg-slate-900 p-8 my-3 items-center justify-center rounded-lg">
+      <div className="flex bg-slate-900 p-8 my-6 items-center justify-center">
         <div className="w-1/2 mx-6">
-          <h2 className="text-xl m-1 text-left">Nome ou Número</h2>
+          <h2 className="text-2xl m-1 text-left">Nome ou Número</h2>
           <input
             type="text"
-            className="input w-full max-w-xs h-10"
+            className="input w-full max-w-xs h-10 text-xl"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -48,7 +48,7 @@ function Home() {
           </button>
         </div>
         <div className="w-1/2 bg-green-500 p-4 rounded-md">
-          <p className="text-white">
+          <p className="text-white text-2xl">
             Realize a busca por Pokémeon pelo nome ou usando número do Pokédex
             Nacional.
           </p>

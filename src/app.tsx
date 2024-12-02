@@ -11,7 +11,7 @@ import Pokemon from "./components/pokemon"
 export function App() {
   return (
     <Router>
-      <div className="app h-screen w-full bg-white">
+      <div className="app h-screen bg-white">
         <Navbar />
         <main className="bg-white">
           <Routes>

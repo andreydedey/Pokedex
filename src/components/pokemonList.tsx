@@ -28,7 +28,7 @@ function PokemonList({
 
   return (
     <div className="pokemonList">
-      <ul className="grid grid-cols-3 gap-4">
+      <ul className="grid grid-cols-3 gap-4 justify-items-center">
         {detailedPokemon.map((pokemon: any) => (
           <Link to={`/pokemon/${pokemon.id}`}>
             <li key={pokemon.id}>
