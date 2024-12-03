@@ -8,6 +8,7 @@ function Pokemon() {
   const { id } = useParams()
   const [pokemon, setPokemon] = useState(null)
   const [pokemonSpecies, setPokemonSpecies] = useState(null)
+  const [pokemonWeakness, setPokemonWeakness] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -20,6 +21,8 @@ function Pokemon() {
       fetchPokemon(`https://pokeapi.co/api/v2/pokemon/${id}`).then((data) => {
         setPokemon(data)
         setLoading(false)
+        console.log(pokemon)
+        getWeakness(data)
       })
     }
 
@@ -29,6 +32,17 @@ function Pokemon() {
           setPokemonSpecies(data)
         },
       )
+    }
+
+    const getWeakness = async (data: any) => {
+      for (const slot of data.types) {
+        fetchPokemon(slot.type.url).then((slot) => {
+          for (const weakness of slot.damage_relations.double_damage_from) {
+            setPokemonWeakness((prevWeakness) => [...prevWeakness, weakness])
+            console.log(pokemonWeakness)
+          }
+        })
+      }
     }
 
     fetchData()

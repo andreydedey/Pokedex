@@ -1,4 +1,9 @@
+import { useEffect, useState } from "react"
+import { fetchPokemon } from "../http/pokemonFetch"
+
 function TypeBadge({ type }) {
+  const [weakness, setWeakness] = useState(null)
+
   type PokemonColor = {
     bg: string
     text: string
@@ -32,7 +37,13 @@ function TypeBadge({ type }) {
     return `${bg} ${text}`.trim()
   }
 
-  console.log(type)
+  useEffect(() => {
+    const getWeakness = async () => {
+      fetchPokemon(type.type.url).then((data) => setWeakness(data))
+    }
+
+    getWeakness()
+  }, [])
 
   return (
     <span
