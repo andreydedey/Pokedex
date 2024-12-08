@@ -21,9 +21,22 @@ function Pokemon() {
       fetchPokemon(`https://pokeapi.co/api/v2/pokemon/${id}`).then((data) => {
         setPokemon(data)
         setLoading(false)
-        console.log(pokemon)
         getWeakness(data)
       })
+    }
+
+    const getWeakness = async (data: any) => {
+      const uniqueWeakness = new Set<string>()
+
+      for (const slot of data.types) {
+        fetchPokemon(slot.type.url).then((slot) => {
+          for (const weakness of slot.damage_relations.double_damage_from) {
+            uniqueWeakness.add(weakness.name)
+          }
+          setPokemonWeakness(Array.from(uniqueWeakness))
+          console.log(uniqueWeakness)
+        })
+      }
     }
 
     const getPokemonSpecies = async () => {
@@ -32,17 +45,6 @@ function Pokemon() {
           setPokemonSpecies(data)
         },
       )
-    }
-
-    const getWeakness = async (data: any) => {
-      for (const slot of data.types) {
-        fetchPokemon(slot.type.url).then((slot) => {
-          for (const weakness of slot.damage_relations.double_damage_from) {
-            setPokemonWeakness((prevWeakness) => [...prevWeakness, weakness])
-            console.log(pokemonWeakness)
-          }
-        })
-      }
     }
 
     fetchData()
@@ -64,11 +66,11 @@ function Pokemon() {
               <img
                 src={pokemon.sprites.other["official-artwork"].front_default}
                 alt={pokemon.name}
-                className="h-64 mx-auto"
+                className="h-80 mx-auto"
               />
             </figure>
             {/* Texto Pokemon e algumas características Segunda Grid*/}
-            <div className="flex flex-col w-96">
+            <div className="flex flex-col justify-between w-80">
               <p className="text-black text-lg text-justify mb-3">
                 {pokemonSpecies.flavor_text_entries[0].flavor_text ||
                   "Carregando Descrição..."}
@@ -111,21 +113,21 @@ function Pokemon() {
                 />
               ))}
             </div>
-            <div className="flex-col">
-              {/* Type */}
+            {/* Type e Quarta Grid */}
+            <div className="flex flex-col justify-between w-96">
               <h3 className="text-2xl text-black font-semibold mb-4">Type</h3>
-              <div className="flex mb-4">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {pokemon.types.map((type) => (
-                  <TypeBadge type={type} />
+                  <TypeBadge type={type.type.name} />
                 ))}
               </div>
               {/* Weaknesses */}
               <h3 className="text-2xl text-black font-semibold mb-4">
                 Weaknesses
               </h3>
-              <div className="flex">
-                {pokemon.types.map((type) => (
-                  <TypeBadge type={type} />
+              <div className="flex flex-wrap gap-2 mb-4">
+                {pokemonWeakness.map((weakness) => (
+                  <TypeBadge type={weakness} />
                 ))}
               </div>
             </div>

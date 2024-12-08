@@ -28,33 +28,31 @@ function PokemonList({
 
   return (
     <div className="pokemonList">
-      <ul className="grid grid-cols-3 gap-4 justify-items-center">
+      <ul className="grid xl:grid-cols-4 lg:grid-cols-3 md> grid-cols-2 gap-4 justify-items-center">
         {detailedPokemon.map((pokemon: any) => (
-          <Link to={`/pokemon/${pokemon.id}`}>
+          <Link
+            to={`/pokemon/${pokemon.id}`}
+            className="card card-compact w-2/3 shadow-x1 bg-slate-800 animate-fade-in"
+          >
             <li key={pokemon.id}>
-              <div className="card card-compact w-96 shadow-x1 bg-slate-800 animate-fade-in">
-                <figure className="bg-slate-700">
-                  <img
-                    className="w-48"
-                    src={
-                      pokemon.sprites.other["official-artwork"].front_default
-                    }
-                  />
-                </figure>
-                <div className="card-body">
-                  <h2 className="card-title">{pokemon.name}</h2>
-                  <div className="card-actions justify-start">
-                    {pokemon.types[0] && (
-                      <div className="badge badge-outline">
-                        {pokemon.types[0].type.name}
-                      </div>
-                    )}
-                    {pokemon.types[1] && (
-                      <div className="badge badge-outline">
-                        {pokemon.types[1].type.name}
-                      </div>
-                    )}
-                  </div>
+              <figure className="bg-slate-700 rounded-lg">
+                <img
+                  src={pokemon.sprites.other["official-artwork"].front_default}
+                />
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title">{pokemon.name}</h2>
+                <div className="card-actions justify-start">
+                  {pokemon.types[0] && (
+                    <div className="badge badge-outline">
+                      {pokemon.types[0].type.name}
+                    </div>
+                  )}
+                  {pokemon.types[1] && (
+                    <div className="badge badge-outline">
+                      {pokemon.types[1].type.name}
+                    </div>
+                  )}
                 </div>
               </div>
             </li>
