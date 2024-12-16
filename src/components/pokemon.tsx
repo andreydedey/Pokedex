@@ -9,6 +9,7 @@ function Pokemon() {
   const [pokemon, setPokemon] = useState(null)
   const [pokemonSpecies, setPokemonSpecies] = useState(null)
   const [pokemonWeakness, setPokemonWeakness] = useState([])
+  const [evolutionChain, setEvolutionChain] = useState({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -34,7 +35,6 @@ function Pokemon() {
             uniqueWeakness.add(weakness.name)
           }
           setPokemonWeakness(Array.from(uniqueWeakness))
-          console.log(uniqueWeakness)
         })
       }
     }
@@ -43,10 +43,35 @@ function Pokemon() {
       fetchPokemon(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(
         (data) => {
           setPokemonSpecies(data)
+          getEvolutionChain(data.evolution_chain.url)
         },
       )
     }
 
+    const getEvolutionChain = async (url: string) => {
+      fetchPokemon(url).then((data) => {
+        let chain: { [key: number]: any } = {}
+        let evolution = data.chain.evolves_to
+        chain[0] = data.chain.species
+
+        let level: number = 1
+
+        while (evolution.length > 0) {
+          evolution.map((evolves_to: any) => {
+            if (chain[level]) {
+              chain[level].push(evolves_to.species)
+            } else {
+              chain[level] = []
+              chain[level].push(evolves_to.species)
+            }
+          })
+          level += 1
+          evolution = evolution[0].evolves_to
+        }
+        setEvolutionChain(chain)
+        console.log(chain)
+      })
+    }
     fetchData()
   }, [])
 
@@ -114,7 +139,7 @@ function Pokemon() {
               ))}
             </div>
             {/* Type e Quarta Grid */}
-            <div className="flex flex-col justify-between w-96">
+            <div className="flex flex-col w-96">
               <h3 className="text-2xl text-black font-semibold mb-4">Type</h3>
               <div className="flex flex-wrap gap-2 mb-4">
                 {pokemon.types.map((type) => (
@@ -131,6 +156,10 @@ function Pokemon() {
                 ))}
               </div>
             </div>
+          </div>
+          <div className="flex flex-col bg-gray-800 p-6 rounded-md my-3">
+            <h3 className="text-2xl text-white font-semibold">Evoluções</h3>
+            <div className="flex">teste</div>
           </div>
         </div>
       </>
