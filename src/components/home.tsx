@@ -63,7 +63,7 @@ function Home() {
         <button
           type="button"
           className="bg-blue-500 hover:bg-blue-700 hover:scale-105 
-          duration-300 text-white p-4 rounded-lg"
+          duration-300 text-white p-4 rounded-lg mb-4"
           onClick={loadPokemons}
         >
           Carregar mais!

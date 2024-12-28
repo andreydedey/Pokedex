@@ -3,6 +3,7 @@ import { fetchPokemon } from "../http/pokemonFetch"
 import { useParams } from "react-router-dom"
 import ProgressBar from "../ui/progressBar"
 import TypeBadge from "../ui/typeBadge"
+import Evolution from "./evolution"
 
 function Pokemon() {
   const { id } = useParams()
@@ -52,7 +53,7 @@ function Pokemon() {
       fetchPokemon(url).then((data) => {
         let chain: { [key: number]: any } = {}
         let evolution = data.chain.evolves_to
-        chain[0] = data.chain.species
+        chain[0] = [data.chain.species]
 
         let level: number = 1
 
@@ -69,7 +70,6 @@ function Pokemon() {
           evolution = evolution[0].evolves_to
         }
         setEvolutionChain(chain)
-        console.log(chain)
       })
     }
     fetchData()
@@ -156,10 +156,7 @@ function Pokemon() {
                 ))}
               </div>
             </div>
-          </div>
-          <div className="flex flex-col bg-gray-800 p-6 rounded-md my-3">
-            <h3 className="text-2xl text-white font-semibold">Evoluções</h3>
-            <div className="flex">teste</div>
+            {evolutionChain && <Evolution chain={evolutionChain} />}
           </div>
         </div>
       </>
