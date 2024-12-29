@@ -5,24 +5,31 @@ import { fetchPokemon } from "../http/pokemonFetch"
 import { useState, useEffect } from "react"
 
 function Home() {
+  const baseUrl = "https://pokeapi.co/v2/"
   // TODO: Filtrar Pokemons com base na Barra de Pesquisa
 
   const [search, setSearch] = useState("")
   const [pokemons, setPokemons] = useState([])
-  const [filteredPokemons, setFilteredPokemons] = useState([])
-  const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon")
 
-  const loadPokemons = async () => {
-    const response = await fetchPokemon(url)
-    setUrl(response.next)
-    setPokemons(response.results)
+  const searchPokemons = async () => {
+    const response = await fetchPokemon(
+      "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0",
+    )
+    let filteredResults = response.results
+    if (search != "") {
+      filteredResults = filteredResults.filter((pokemon) => {
+        return pokemon.name.toLowerCase().startsWith(search.toLowerCase())
+      })
+    }
+    setPokemons(filteredResults)
   }
 
   useEffect(() => {
     const getPokemons = async () => {
-      const data = await fetchPokemon(url)
+      const data = await fetchPokemon(
+        "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0",
+      )
       setPokemons(data.results)
-      setUrl(data.next) // Para que quando eu aperte o botão de carregar mais venha a outra leva de pokemons
     }
 
     getPokemons()
@@ -43,6 +50,7 @@ function Home() {
           <button
             className="bg-orange-600 hover:bg-red-700 hover:scale-105 
             duration-200 text-xl text-white rounded-md h-10 w-10 ml-5"
+            onClick={() => searchPokemons()}
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
@@ -57,18 +65,6 @@ function Home() {
 
       {/* Lista de Pokemons */}
       {pokemons && <PokemonList pokemons={pokemons} />}
-
-      {/* Botão de Carregar Pokemons */}
-      <div className="flex justify-center my-4">
-        <button
-          type="button"
-          className="bg-blue-500 hover:bg-blue-700 hover:scale-105 
-          duration-300 text-white p-4 rounded-lg mb-4"
-          onClick={loadPokemons}
-        >
-          Carregar mais!
-        </button>
-      </div>
     </div>
   )
 }

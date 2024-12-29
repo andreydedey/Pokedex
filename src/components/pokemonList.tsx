@@ -1,30 +1,64 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { fetchPokemon } from "../http/pokemonFetch"
 import { Link } from "react-router-dom"
 
 function PokemonList({
   pokemons,
 }: { pokemons: { name: string; url: string }[] }) {
+  const loadMore = 24
+
   const [detailedPokemon, setDetailedPokemon] = useState<any[]>([])
+  const [pokemonLimit, setPokemonLimit] = useState(loadMore)
+  const [loadingMore, setLoadingMore] = useState(false)
+
+  const prevPokemons = useRef(pokemons)
+  const prevPokemonLimit = useRef(pokemonLimit)
 
   useEffect(() => {
-    if (pokemons.length > 0) {
-      const fetchDetails = async () => {
-        const newDetails: any = []
+    const pokemonsChanged = !areArraysEqual(prevPokemons.current, pokemons)
+    const pokemonLimitChanged = prevPokemonLimit.current !== pokemonLimit
 
-        for (const pokemon of pokemons) {
-          // Evita buscar detalhes de pokémons que já existem
-          const details = await fetchPokemon(pokemon.url)
-          newDetails.push(details)
-        }
+    // Se os pokemons mudaram, resetar o estado
+    if (pokemonsChanged) {
+      console.log("Pokemons mudaram")
+      setDetailedPokemon([]) // Resetar os pokemons detalhados
+    }
 
-        // Adiciona os novos detalhes ao estado
-        setDetailedPokemon((prev) => [...prev, ...newDetails])
-      }
-
+    // Se o limite de pokemons mudou ou se os pokemons mudaram
+    if (pokemonsChanged || pokemonLimitChanged) {
       fetchDetails()
     }
-  }, [pokemons])
+
+    prevPokemons.current = pokemons
+    prevPokemonLimit.current = pokemonLimit
+  }, [pokemons, pokemonLimit])
+
+  const fetchDetails = async () => {
+    const newDetails: any = []
+
+    // Carregar os detalhes dos pokemons com base no limite atual
+    for (let i = 0; i < pokemons.length; i++) {
+      if (i >= 0 && i < pokemonLimit) {
+        const details = await fetchPokemon(pokemons[i].url)
+        if (!detailedPokemon.some((poke) => poke.id === details.id)) {
+          newDetails.push(details)
+        }
+      }
+    }
+
+    // Atualiza o estado com os novos detalhes carregados
+    setDetailedPokemon((prev) => [...prev, ...newDetails])
+    setLoadingMore(false)
+    console.log(pokemons)
+    console.log(newDetails)
+  }
+
+  const loadPokemons = () => {
+    if (pokemons.length > pokemonLimit) {
+      setPokemonLimit((prev) => prev + loadMore)
+      setLoadingMore(true)
+    }
+  }
 
   return (
     <div className="pokemonList">
@@ -59,8 +93,28 @@ function PokemonList({
           </Link>
         ))}
       </ul>
+
+      {/* Botão de Carregar Pokemons */}
+      <div className="flex justify-center my-4">
+        <button
+          type="button"
+          className="bg-blue-500 hover:bg-blue-700 hover:scale-105 
+          duration-300 text-white p-4 rounded-lg mb-4"
+          onClick={loadPokemons}
+        >
+          Carregar mais!
+        </button>
+      </div>
     </div>
   )
+}
+
+const areArraysEqual = (arr1: any[], arr2: any[]) => {
+  if (arr1.length !== arr2.length) return false
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i].url !== arr2[i].url) return false
+  }
+  return true
 }
 
 export default PokemonList
