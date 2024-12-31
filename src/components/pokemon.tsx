@@ -122,7 +122,9 @@ function Pokemon() {
                 <li>
                   Habitat: <br />
                   <span className="text-black">
-                    {pokemonSpecies.habitat.name}
+                    {pokemonSpecies?.habitat
+                      ? pokemonSpecies.habitat.name
+                      : "Habitat desconhecido"}
                   </span>
                 </li>
               </ul>

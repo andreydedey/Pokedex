@@ -19,7 +19,10 @@ function Evolution({ chain }: any) {
       <div className="flex justify-center gap-6">
         {Object.keys(chain).map((key, index) => (
           <div className="flex items-center gap-6">
-            <ul key={key}>
+            <ul
+              key={key}
+              className={`grid gap-3 grid-cols-${Math.ceil(chain[key].length / 3)}`}
+            >
               {chain[key].map((pokemon) => (
                 <li className="bg-slate-800 rounded-md p-3">
                   <Link to={`/pokemon/${pokemon.name}`}>
