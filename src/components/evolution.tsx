@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 
@@ -21,14 +22,16 @@ function Evolution({ chain }: any) {
             <ul key={key}>
               {chain[key].map((pokemon) => (
                 <li className="bg-slate-800 rounded-md p-3">
-                  <img
-                    className="w-44"
-                    src={getImage(pokemon.url)}
-                    alt={`${pokemon.name} image`}
-                  />
-                  <h4 className="text-xl font-semibold text-white">
-                    {pokemon.name}
-                  </h4>
+                  <Link to={`/pokemon/${pokemon.name}`}>
+                    <img
+                      className="w-44"
+                      src={getImage(pokemon.url)}
+                      alt={`${pokemon.name} image`}
+                    />
+                    <h4 className="text-xl font-semibold text-white">
+                      {pokemon.name}
+                    </h4>
+                  </Link>
                 </li>
               ))}
             </ul>

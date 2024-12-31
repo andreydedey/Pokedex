@@ -6,7 +6,7 @@ import TypeBadge from "../ui/typeBadge"
 import Evolution from "./evolution"
 
 function Pokemon() {
-  const { id } = useParams()
+  const { id } = useParams() // can be a name too
   const [pokemon, setPokemon] = useState(null)
   const [pokemonSpecies, setPokemonSpecies] = useState(null)
   const [pokemonWeakness, setPokemonWeakness] = useState([])
@@ -73,7 +73,7 @@ function Pokemon() {
       })
     }
     fetchData()
-  }, [])
+  }, [pokemon])
 
   if (pokemon && pokemonSpecies) {
     return (
